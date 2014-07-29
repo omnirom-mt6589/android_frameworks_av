@@ -40,6 +40,13 @@ LOCAL_SRC_FILES:= \
 	CameraUtils.cpp \
 	VendorTagDescriptor.cpp
 
+
+ifeq ($(TARGET_BOARD_PLATFORM),mt6589)
+LOCAL_SRC_FILES += \
+	MtkCamera.cpp \
+	MtkCameraParameters.cpp
+endif
+
 LOCAL_SHARED_LIBRARIES := \
 	libcutils \
 	libutils \
@@ -53,6 +60,22 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES += \
 	system/media/camera/include \
 	system/media/private/camera/include \
+
+ifeq ($(BOARD_CAMERA_HAVE_ISO),true)
+	LOCAL_CFLAGS += -DHAVE_ISO
+endif
+
+ifeq ($(TARGET_BOARD_PLATFORM),mt6589)
+LOCAL_CFLAGS += -DMTK_MT6589
+endif
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
+ifeq ($(BOARD_USES_QCOM_LEGACY_CAM_PARAMS),true)
+	LOCAL_CFLAGS += -DQCOM_LEGACY_CAM_PARAMS
+endif
 
 LOCAL_MODULE:= libcamera_client
 
